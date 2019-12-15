@@ -16,15 +16,19 @@ def test_split():
 
 def test_oneWordName():
     words = ['mirdan']
-    number = 1
-    expected = 'mirdan1'
-    assert emailGeneratorClass.oneWordName(words, number) == expected
+    expected = 'mirdan'
+    assert emailGeneratorClass.oneWordName(words) == expected
 
 def test_moreThanOneWord():
     words = ['aku', 'sekarang', 'laper']
-    number = 2
-    expected = 'aku.laper2'
-    assert emailGeneratorClass.moreThanOneWord(words, number) == expected
+    expected = 'aku.laper'
+    assert emailGeneratorClass.moreThanOneWord(words) == expected
+
+def test_generateUserName():
+    user = "hubby"
+    number = 123
+    expect = 'hubby123'
+    assert emailGeneratorClass.generateUserName(user, number) == expect
 
 def test_generateEmailName():
     words = 'nama.depan'

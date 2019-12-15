@@ -1,28 +1,32 @@
 
 class emailGenerator(object):
 
-    def __init__(self, domain):
+    def __init__(self, domain, database):
         self.domain = domain 
+        self.database = database
     
-    def toLower(self, word):
-        result = word.lower()
-        return result
+    def createUserName(self, fullname):
+        fullname = fullname.lower()
+        fullname = fullname.split(' ')
+        if len(fullname) == 1:
+            return fullname[0]
+        else:
+            return fullname[0] + '.' + fullname[-1]
 
-    def split(self, word):
-        result = word.split(' ')
-        return result
+    def generateUserName(self, fullname):
+        username = self.createUserName(fullname)
 
-    def oneWordName(self, words):
-        return words[0] 
+        if username in self.database:
+            number = self.database[username] + 1
+            self.database[username] = number
+        else:
+            self.database[username] = 0
+            number = ''
         
-    def moreThanOneWord(self, words):
-        return words[0] + "." + words[-1] 
-    
-    def generateUserName(self, user, number):
-        return user + str(number)
-        
-    def generateEmailName(self, words):
-        return words + self.domain
+        return username + str(number)
+
+    def generateEmailName(self, username):
+        return username + self.domain
 
 
 if __name__ == "__main__":
@@ -32,29 +36,10 @@ if __name__ == "__main__":
 
 
     while True:
-        input = raw_input('Inputkan nama lengkap anda: \n > ')
-        emGenerator = emailGenerator(domain)
-        lowerChar = emGenerator.toLower(input)
-        splittedChar = emGenerator.split(lowerChar)
-
-        lengthArray = len(splittedChar)
-
-        if lengthArray == 1:
-            userName = emGenerator.oneWordName(splittedChar)
-        else:
-            userName = emGenerator.moreThanOneWord(splittedChar)
-    
-
-        if userName in database:
-            number = database[userName] + 1
-            database[userName] = number
-        else:
-            database[userName] = 0
-            number = ''
-
-        userNameFinal = emGenerator.generateUserName(userName,number)
-        emailName = emGenerator.generateEmailName(userNameFinal)
-
+        fullname = raw_input('Inputkan nama lengkap anda: \n > ')
+        emGenerator = emailGenerator(domain, fullname, database)
+        userName = emGenerator.generateUserName(fullname)
+        emailName = emGenerator.generateEmailName(userName)
         print ""
         print "Username Anda:", userName
         print "Email anda   :", emailName
